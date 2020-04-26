@@ -1,0 +1,44 @@
+<html>
+<head>
+<script>
+function tryThis()
+{
+var request=new XMLHttpRequest()
+request.open('GET','https://restcountries.eu/rest/v2/all',true)
+request.onload=function()
+{
+var data=JSON.parse(this.response);
+var findName=data.find((item)=>{
+document.getElement
+return item.name.toUpperCase() == document.getElementById('countryName').value.toUpperCase();
+})
+var city=findName.capital;
+var link = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&apikey="+"bb0a5a97e99ae93b148d219df2f4e97f";
+var req = new XMLHttpRequest();
+req.open('GET',link,true);
+req.onload = function(){
+var tempobject = JSON.parse(this.response);
+if (req.status >= 200 && req.status < 400) {
+document.getElementById('temperature').value = tempobject.main.temp;
+document.getElementById('Pressure').value = tempobject.main.pressure;
+document.getElementById('Humidity').value = tempobject.main.humidity;
+console.log(temp)
+}
+else{
+console.log("The city doesn't exist! Kindly check");
+}
+};
+req.send();
+}
+request.send();
+};
+</script>
+</head>
+<body>
+<label> Country Name : </label> 
+<input id='countryName' type='text'> <br/> <br/>
+<button onclick = "tryThis()"> Get Temperature of the capital City </button> <br/> <br/>
+<label> Temperature : </label> <input id='temperature' type='text'>
+<label> Pressure : </label> <input id='Pressure' type='text'>
+<label> Humidity : </label> <input id='Humidity' type='text'>
+</body>
