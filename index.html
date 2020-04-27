@@ -1,16 +1,69 @@
 <html>
 <head>
+<style>
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.left {
+  left: 0;
+  background-color:#990011FF ;
+}
+
+.right {
+  right: 0;
+  background-color: white;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+</style>
 <script>
-function tryThis()
-{
+window.onload = function(){
 var request=new XMLHttpRequest()
 request.open('GET','https://restcountries.eu/rest/v2/all',true)
 request.onload=function()
 {
 var data=JSON.parse(this.response);
+data.forEach((item , index)=>{
+var img = document.createElement('img');
+img.src = item.flag;
+img.height = 50;
+img.width = 50;
+img.capital = item.capital;
+img.addEventListener("click", function() {tryThis(item.name)}, false);
+document.getElementById('flag').appendChild(img);
+var label = document.createElement('label');
+label.innerHTML = "&nbsp;&nbsp;&nbsp;"
+document.getElementById('flag').appendChild(label);
+})
+}
+request.send();
+}
+
+function tryThis(name)
+{
+console.log(name);
+var request=new XMLHttpRequest()
+request.open('GET','https://restcountries.eu/rest/v2/all',true)
+request.onload=function()
+{
+var data=JSON.parse(this.response);
+console.log(data);
 var findName=data.find((item)=>{
-document.getElement
-return item.name.toUpperCase() == document.getElementById('countryName').value.toUpperCase();
+return item.name.toUpperCase() == name.toUpperCase();
 })
 var city=findName.capital;
 var link = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&apikey="+"bb0a5a97e99ae93b148d219df2f4e97f";
@@ -19,6 +72,7 @@ req.open('GET',link,true);
 req.onload = function(){
 var tempobject = JSON.parse(this.response);
 if (req.status >= 200 && req.status < 400) {
+document.getElementById('countryName').value = name;
 document.getElementById('temperature').value = tempobject.main.temp;
 document.getElementById('Pressure').value = tempobject.main.pressure;
 document.getElementById('Humidity').value = tempobject.main.humidity;
@@ -34,11 +88,20 @@ request.send();
 };
 </script>
 </head>
-<body>
-<label> Country Name : </label> 
-<input id='countryName' type='text'> <br/> <br/>
-<button onclick = "tryThis()"> Get Temperature of the capital City </button> <br/> <br/>
-<label> Temperature : </label> <input id='temperature' type='text'>
-<label> Pressure : </label> <input id='Pressure' type='text'>
-<label> Humidity : </label> <input id='Humidity' type='text'>
+<body >
+<div class="split left">
+  <div class="centered">
+	</label> <p id ='flag'/>
+  </div>
+</div>
+
+<div class="split right">
+  <div class="centered">
+  <label> <b>Click on a country flag to get the below details </b></label> <br/> <br/>
+    <label> Country Name : </label> <input id='countryName' type='text'><br /><br />
+	<label> Temperature : </label> <input id='temperature' type='text'><br /><br />
+	<label> Pressure : </label> <input id='Pressure' type='text'><br /><br />
+	<label> Humidity : </label> <input id='Humidity' type='text'> <br /><br />
+  </div>
+</div>
 </body>
